@@ -1,1 +1,1 @@
-An A* Pathfinding Algorithm visualized by Pygame
+An A* Pathfinding Algorithm visualized with Pygame
