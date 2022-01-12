@@ -81,7 +81,7 @@ def solver():
         for i in range(len(openned)):
             if openned[i].f < openned[lowest].f:
                 lowest = i
-        #import pdb; pdb.set_trace()
+                
         current = openned[lowest]
         openned[lowest].closed = True
         current.drawSquare((118, 255, 180), 0)
@@ -101,7 +101,7 @@ visited = []
 
 font = pygame.font.Font(pygame.font.get_default_font(), 13)
 
-# Set values g, h and f for neighbouring values
+# Set values g, h and f for neighbouring nodes
 def generateNeighboursValues(parent):
     neighbour = parent.neighbours
     for i in range(len(neighbour)):
@@ -122,7 +122,7 @@ def generateNeighboursValues(parent):
             if neighbour[i] != end:
                 neighbour[i].drawSquare(red, 0)
 
-# Calcuate distance between a and b
+# returns the distance between a and b
 def heuristics(a, b):
     try:
         h = (max(abs(a.xpos - b.xpos), abs(a.ypos - b.ypos)))*10
@@ -130,66 +130,64 @@ def heuristics(a, b):
         h = 0
     return h
 
-rows = 40
-cols = 40
+if __name__ == '__main__':
+    rows = 40
+    cols = 40
 
-w = windowWidth / rows
-h = windowHeight / cols
+    w = windowWidth / rows
+    h = windowHeight / cols
 
-openned = []
-block  = []
+    openned = []
+    block  = []
 
-red = (255, 0, 0)
-black = (0, 0, 0)
-blue = (0, 0, 255)
-green = (118, 255, 0)
-white = (255, 255, 255)
+    red = (255, 0, 0)
+    black = (0, 0, 0)
+    blue = (0, 0, 255)
+    green = (118, 255, 0)
+    white = (255, 255, 255)
 
-# Build the grid
-grid = [['' for i in range(rows)] for i in range(cols)]
+    # Build the grid
+    grid = [['' for i in range(rows)] for i in range(cols)]
 
-# Initialize nodes, draw squares
-for i in range(rows):
-    for z in range(cols):
-        grid[i][z] = Nodes(i, z, 0)
-        grid[i][z].drawSquare(red, 1)
+    # Initialize nodes, draw squares
+    for i in range(rows):
+        for z in range(cols):
+            grid[i][z] = Nodes(i, z, 0)
+            grid[i][z].drawSquare(red, 1)
 
-locked = '1'
+    locked = '1'
 
-run = True
-while run:
-    pygame.time.delay(100)
+    run = True
+    while run:
+        pygame.time.delay(100)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
 
-        if event.type == pygame.KEYDOWN and locked == '3':
-            if event.key == pygame.K_SPACE:
-                 # Set neighbouring notes for each node in the grid and run the solver
-                [[[setNeighbours(i, z)] for z in range(cols)] for i in range(rows)]
-                solver()
+            if event.type == pygame.KEYDOWN and locked == '3':
+                if event.key == pygame.K_SPACE:
+                     # Set neighbouring notes for each node in the grid and run the solver
+                    [[[setNeighbours(i, z)] for z in range(cols)] for i in range(rows)]
+                    solver()
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            x, y = event.pos
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
 
-            if locked == '1':
-                grid[int(x / w)][int(y / h)].drawSquare(green, 0)
-                start = grid[int(x / w)][int(y / h)]
-                openned.append(start)
-                locked = '2'
+                if locked == '1':
+                    grid[int(x / w)][int(y / h)].drawSquare(green, 0)
+                    start = grid[int(x / w)][int(y / h)]
+                    openned.append(start)
+                    locked = '2'
 
-            elif locked == '2':
-                end = grid[int(x / w)][int(y / h)].drawSquare(blue, 0)
-                end = grid[int(x / w)][int(y / h)]
-                locked = '3'
+                elif locked == '2':
+                    end = grid[int(x / w)][int(y / h)].drawSquare(blue, 0)
+                    end = grid[int(x / w)][int(y / h)]
+                    locked = '3'
 
-            elif locked == '3':
-                drawObsticles()
+                elif locked == '3':
+                    drawObsticles()
 
 
-        pygame.display.update()
-pygame.quit()
-
-# if __name__ == '__main__':
-#     main()
+            pygame.display.update()
+    pygame.quit()
